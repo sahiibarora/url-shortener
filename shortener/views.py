@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from .models import URL
 
+@csrf_exempt
 def home(request):
     short_url = None
     if request.method == 'POST':
