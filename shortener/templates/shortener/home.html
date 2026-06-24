@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Shortener</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4ff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+
+    .logo span {
+      color: #0d6efd;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 36px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input[type="url"] {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #1a1a2e;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 16px;
+    }
+
+    input[type="url"]:focus {
+      border-color: #0d6efd;
+    }
+
+    input[type="url"]::placeholder {
+      color: #bbb;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #0d6efd;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.03em;
+    }
+
+    button:hover {
+      background: #0b5ed7;
+    }
+
+    button:active {
+      transform: scale(0.99);
+    }
+
+    .result {
+      margin-top: 28px;
+      background: #f0f6ff;
+      border: 1.5px solid #c7deff;
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+
+    .result-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #0d6efd;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .result-url {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a2e;
+      word-break: break-all;
+      margin-bottom: 12px;
+    }
+
+    .copy-btn {
+      display: inline-block;
+      padding: 8px 18px;
+      background: #0d6efd;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: auto;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #0b5ed7;
+    }
+
+    .divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin: 32px 0;
+    }
+
+    .footer-text {
+      text-align: center;
+      font-size: 12px;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <div class="logo">Short<span>ly</span></div>
+    <p class="subtitle">Paste a long URL and get a short, shareable link instantly.</p>
+
+    <form method="POST">
+      {% csrf_token %}
+      <label for="original_url">Your long URL</label>
+      <input
+        type="url"
+        id="original_url"
+        name="original_url"
+        placeholder="https://example.com/very/long/url..."
+        required
+      >
+      <button type="submit">Shorten URL →</button>
+    </form>
+
+    {% if short_url %}
+    <div class="result">
+      <div class="result-label">✓ Your short link is ready</div>
+      <div class="result-url" id="short-link">{{ short_url }}</div>
+      <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+    </div>
+    {% endif %}
+
+    <div class="divider"></div>
+    <p class="footer-text">Built with Python & Django · Sahib Arora</p>
+
+  </div>
+
+  <script>
+    function copyLink() {
+      const link = document.getElementById('short-link').innerText;
+      navigator.clipboard.writeText(link).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy Link', 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
